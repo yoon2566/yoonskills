@@ -1,4 +1,0 @@
-interface:
-  display_name: "Canva Template Edit"
-  short_description: "기존 Canva 템플릿을 유지한 채 내용만 빠르게 교체"
-  default_prompt: "Use $canva-education-template-edit to edit this Canva design in place, keep the template style, replace only the content, show every changed-page preview, and ask for approval only before the final save."
