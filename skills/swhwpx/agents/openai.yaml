@@ -1,0 +1,4 @@
+interface:
+  display_name: "SWHWPX"
+  short_description: "Create, validate, and edit Korean HWPX files, including the Gangwon SW photo workflow."
+  default_prompt: "Use $swhwpx to create, inspect, edit, validate, or run the Gangwon SW HWPX photo replacement workflow without Hancom Office."

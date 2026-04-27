@@ -1,4 +1,0 @@
-interface:
-  display_name: "HWPX"
-  short_description: "Create and validate Korean HWPX without Hancom Office"
-  default_prompt: "Use $hwpx to create, inspect, edit, or validate Korean HWPX files without using Hancom Office."

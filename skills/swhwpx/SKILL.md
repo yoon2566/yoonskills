@@ -1,13 +1,15 @@
 ---
-name: hwpx
-description: Create, inspect, edit, and validate Korean Hangul HWPX documents without Hancom Office. Use for .hwp/.hwpx reference forms, direct OWPML XML assembly, lecture-plan generation, table/form preservation, text extraction, HWPX package validation, and older prompts that mention hwpx-2.
+name: swhwpx
+description: Create, inspect, edit, and validate Korean Hangul HWPX documents without Hancom Office, with a built-in 강원SW미래채움 photo replacement workflow. Use for .hwp/.hwpx reference forms, direct OWPML XML assembly, lecture-plan generation, table/form preservation, text extraction, HWPX package validation, and repeated 한글문서테스트원본 jobs where 강의진행/교육진행 서명록 photos become 파이리 images, 교육 활동사진 becomes natural landscape images, 주유비 증빙사진 stays unchanged, and the result is saved through Google Drive Desktop.
 ---
 
-# HWPX
+# SWHWPX
 
 Use this skill when the user wants Korean Hangul documents created, inspected, edited, or checked without launching Hancom Office. The default output is `.hwpx`, not binary `.hwp`.
 
 Core rule: do not use Hancom Office, COM automation, or GUI conversion. Build HWPX as a ZIP/XML package and validate the result.
+
+For the repeated 강원SW미래채움 photo replacement task, use `scripts/replace_gangwon_photos.py` instead of re-discovering image ids by hand.
 
 ## Environment
 
@@ -49,7 +51,7 @@ Use paths relative to this skill directory when running bundled scripts.
 
 ```powershell
 $py = "C:\path\to\workspace\.venv\Scripts\python.exe"
-$skill = "C:\Users\gyu\.codex\skills\hwpx"
+$skill = "C:\Users\gyu\.codex\skills\swhwpx"
 
 # Analyze an HWPX reference form.
 & $py "$skill\scripts\analyze_template.py" "reference.hwpx" `
@@ -77,6 +79,48 @@ $skill = "C:\Users\gyu\.codex\skills\hwpx"
   --reference "reference.hwpx" `
   --output "result.hwpx"
 ```
+
+## 강원SW 사진 교체 Helper
+
+Use `scripts/replace_gangwon_photos.py` for the repeated `한글문서테스트원본` workflow:
+
+- `Contents/section0.xml`의 `image1`: `[강원SW미래채움] 강의진행 서명록(학교교사/강사)`
+- `Contents/section0.xml`의 `image2`: `[강원SW미래채움] 교육진행 서명록(학생)`
+- `Contents/section1.xml`의 `image3`: `교육 활동사진`과 `교육 주유비 증빙사진`에서 함께 쓰임
+- First four `binaryItemIDRef="image3"` references are 교육 활동사진 and should become `image4` through `image7`.
+- Leave the final `image3` reference unchanged so the 주유비 증빙사진 stays intact.
+
+Default run:
+
+```powershell
+$py = ".\.venv\Scripts\python.exe"
+$skill = "C:\Users\gyu\.codex\skills\swhwpx"
+& $py "$skill\scripts\replace_gangwon_photos.py" `
+  --source-folder ".\yoonskills\한글문서테스트원본" `
+  --drive-root "G:\내 드라이브" `
+  --target-folder-name "한글테스트" `
+  --validate
+```
+
+If image detection is ambiguous, pass explicit filenames:
+
+```powershell
+& $py "$skill\scripts\replace_gangwon_photos.py" `
+  --source-folder ".\yoonskills\한글문서테스트원본" `
+  --signature-images "파이리1.png" "파이리2.png" `
+  --activity-images "풍경1.png" "풍경2.png" "풍경3.png" "풍경4.png" `
+  --drive-root "G:\내 드라이브" `
+  --target-folder-name "한글테스트" `
+  --validate
+```
+
+Known pitfalls from the first run:
+
+- `Expand-Archive` rejects `.hwpx`; use ZIP APIs.
+- PowerShell inline Python can break Korean paths and quotes; use the script file.
+- HWPX validation requires `mimetype` to be the first ZIP entry and stored without compression.
+- Do not replace every `image3` reference. The last `image3` is the 주유비 증빙사진.
+- Console output can show mojibake for Korean paths even when the file is correct; validate the actual file.
 
 ## Lecture Plan Helper
 
