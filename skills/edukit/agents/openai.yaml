@@ -1,0 +1,4 @@
+interface:
+  display_name: "EduKit"
+  short_description: "Coordinate multi-tool education production workflows"
+  default_prompt: "Use $edukit to coordinate this end-to-end education production task."
