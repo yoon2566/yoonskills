@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yoon HWPX"
+  short_description: "Safely edit Korean HWPX while preserving the form."
+  default_prompt: "Use $yoon-hwpx to edit or validate a Korean HWPX document while preserving its original form and avoiding Hancom Office."
