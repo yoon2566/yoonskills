@@ -1,9 +1,9 @@
 ---
-name: hwpx-safe-edit
+name: yoon-hwpx
 description: Use this skill for Korean HWPX, Hangul document, 원본 양식 보존, linesegarray, security warning, safe text-node editing, validation, and troubleshooting without local Hancom Office.
 ---
 
-# HWPX Safe Edit Skill
+# Yoon HWPX Skill
 
 Use this skill when the user asks to edit, generate, validate, repair, or troubleshoot a Korean HWPX document while preserving the original Hangul document layout.
 
@@ -39,7 +39,7 @@ Resolve bundled scripts relative to this skill directory.
 $env:PYTHONUTF8='1'
 $env:PYTHONIOENCODING='utf-8'
 $py = ".\.venv\Scripts\python.exe"
-$skill = "C:\path\to\hwpx-safe-edit"
+$skill = "C:\path\to\yoon-hwpx"
 
 & $py "$skill\scripts\analyze_hwpx.py" .\input\template.hwpx --json .\work\analysis.json
 & $py "$skill\scripts\extract_text_map.py" .\input\template.hwpx --output .\work\text-map.json
