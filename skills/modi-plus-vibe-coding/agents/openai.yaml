@@ -1,0 +1,4 @@
+interface:
+  display_name: "MODI+ 바이브 코딩"
+  short_description: "MODI+ 하드웨어와 Python 작품을 안전하게 만들고 검증하는 학생용 흐름"
+  default_prompt: "Use $modi-plus-vibe-coding to scan MODI+ hardware, build a minimal safe experiment, and document the evidence."

@@ -1,0 +1,180 @@
+--- PDF 1 ---
+C O D E W I T H C A T H Y · A I V I B E C O D I N G
+A I 바이브코딩으로배우는
+파이모디플러스
+8차시 | LED와 센서
+버튼·환경 센서 특성 | 조건별 LED 색 변경 | 페이퍼 무드등
+C odeW ithCathy
+
+--- PDF 2 ---
+8 차시 · L E D 와 센서
+버튼 모듈 — 클릭으로 LED 제어하기
+Button 모듈의 4가지 상태를 배웁니다
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 01
+버튼 4가지 상태
+상태 설명 코드
+clicked 버튼 한 번 클릭 b utton.clicked
+d oub le_clicked 버튼 두 번 클릭 b utton.d oub le_clicked
+p ressed 누르고 있는 상태 b utton.p ressed
+tog g led O N /O FF 전환 b utton.tog g led
+버튼 + LED 기본 코드
+import modi_plus, time
+bundle = modi_plus.MODIPlus()
+button = bundle.buttons[0]
+led = bundle.leds[0]
+while True:
+if button.clicked:
+led.rgb = (255, 100, 0)
+time.sleep(0.5)
+led.turn_off()
+elif button.pressed:
+led.rgb = (0, 0, 255)
+else:
+led.turn_off()
+time.sleep(0.1)
+• 클릭 → 주황 점멸 0.5초 • 누르고 있으면 → 파랑 유지 • 아무것도 안 하면 → 꺼짐
+• time.sleep(0.1): 루프 안정화 (필수!)
+바이브코딩 프롬프트
+"파이모디 버튼을 한 번 누르면 LED 빨간색, 두 번 누르면
+초록색
+초
+, 누르고 있으면 파란색 코드 만들어줘"
+
+--- PDF 3 ---
+8 차시 · L E D 와 센서
+실습 — 버튼으로 LED 색 바꾸기
+버튼 클릭 시 LED 색이 순환하는 무드등을 만듭니다
+C odeW ithCathy AI 바이브코딩 × 파이모디 플러스 02
+실습 A: 페이퍼 무드등
+import modi_plus, time
+bundle = modi_plus.MODIPlus()
+button = bundle.buttons[0]
+led = bundle.leds[0]
+colors = [
+(0, 0, 0), # 꺼짐
+(255, 0, 0), # 빨강
+(0, 255, 0), # 초록
+(0, 0, 255), # 파랑
+]
+mode = 0
+while True:
+if button.double_clicked:
+led.turn_off()
+break
+if button.clicked:
+mode = (mode + 1) % 4
+led.rgb = colors[mode]
+time.sleep(0.1)
+
+--- PDF 4 ---
+8 차시 · L E D 와 센서
+실습 — 버튼으로 LED 색 바꾸기
+버튼 클릭 시 LED 색이 순환하는 무드등을 만듭니다
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 02
+while True:
+if button.double_clicked:
+led.turn_off()
+break
+if button.clicked:
+mode = (mode + 1) % 4
+led.rgb = levels[mode]
+time.sleep(0.1)
+바이브코딩 프롬프트
+"버튼 클릭마다 색이 빨→초→파→꺼짐 순환하고, 더블클릭이면 종료하는 무드등 코드
+만들어줘
+만
+"
+실습 B: 밝기 3단계 무드등
+import modi_plus, time
+bundle = modi_plus.MODIPlus()
+button = bundle.buttons[0]
+led = bundle.leds[0]
+levels = [
+(0, 0, 0),
+(80, 80, 40),
+(160, 160, 80),
+(255, 255, 120),
+]
+mode = 0
+
+--- PDF 5 ---
+8 차시 · L E D 와 센서
+환경 센서 — 빛·소리·온도·습도 감지
+Environment 모듈로 주변 환경을 수치로 읽어봅니다
+C odeW ithCathy AI 바이브코딩 × 파이모디 플러스 03
+Environment 센서값
+속성 측정 대상 범위 코드
+illum inance 빛의 밝기 (조도) 0~ 100% env.illum inance
+volum e 주변 소리 크기 0~ 100% env.volum e
+tem p eratur
+e 온도 (°C) - 40~ 125 env.tem perature
+hum id ity 습도 (% ) 0~ 100 env.hum id ity
+
+--- PDF 6 ---
+8 차시 · L E D 와 센서
+환경 센서 — 빛·소리·온도·습도 감지
+Environment 모듈로 주변 환경을 수치로 읽어봅니다
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 03
+센서값 읽기 코드
+import modi_plus, time
+bundle = modi_plus.MODIPlus()
+env = bundle.envs[0]
+while True:
+print(f"빛: {env.illuminance:.1f}%")
+print(f"소리: {env.volume:.1f}%")
+print(f"온도: {env.temperature:.1f}C")
+print(f"습도: {env.humidity:.1f}%")
+print("---")
+time.sleep(1)
+조건별 LED 자동 제어
+# 빛이 어두우면 LED 켜줘
+while True:
+light = env.illuminance
+if light < 30:
+led.rgb = (255, 255, 0)
+elif light < 60:
+led.rgb = (0, 128, 0)
+else:
+led.turn_off()
+time.sleep(0.5)
+
+--- PDF 7 ---
+8 차시 · L E D 와 센서
+실습 — 센서로 LED 자동 제어
+빛·소리 센서값에 따라 LED가 자동으로 반응하는 프로그램을 만듭니다
+C odeW ithCathy AI 바이브코딩 × 파이모디 플러스 04
+실습 A: 자동 조명 (빛 센서)
+import modi_plus, time
+bundle = modi_plus.MODIPlus()
+env = bundle.envs[0]
+led = bundle.leds[0]
+while True:
+light = env.illuminance
+if light < 30:
+led.rgb = (255, 255, 0) # 어두움
+elif light < 60:
+led.rgb = (0, 128, 0) # 보통
+else:
+led.turn_off() # 밝음
+time.sleep(0.5)
+실습 B: 습도 알리미
+import modi_plus, time
+bundle = modi_plus.MODIPlus()
+env = bundle.envs[0]
+led = bundle.leds[0]
+display = bundle.displays[0]
+while True:
+humid = env.humidity # 습도 값 읽기 (0~100%)
+if humid > 60.0:
+display.text = "WET! & Ventilate" # 디스플레이 경고
+led.rgb = (0, 0, 255)
+else:
+display.text = "DRY & Good" # 디스플레이 정상 상태
+led.rgb = (0, 255, 0)
+time.sleep(1)
+
+--- PDF 8 ---
+감사합니다
+Thank Y ou!
+AI 바이브코딩으로 배우는 파이모디 플러스 · 8차시
+C odeWithCathy

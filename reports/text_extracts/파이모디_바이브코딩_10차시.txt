@@ -1,0 +1,192 @@
+--- PDF 1 ---
+C O D E W I T H C A T H Y · A I V I B E C O D I N G
+A I 바이브코딩으로배우는
+파이모디플러스
+10차시 | 다중 센서 조합
+복합 조건 and/or | 우선순위 로직 설계 | 스마트 경보 시스템
+C odeW ithCathy
+
+--- PDF 2 ---
+10 차시 · 다중 센서 조합
+복합 조건 — 여러 센서를 동시에 판단하기
+and/or 논리 연산자로 2개 이상 센서를 동시에 확인합니다
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 01
+and / or / not 정리
+연산자 의미 예시 결과
+and 둘 다 참이어야 True 빛< 30 and 소리> 50 둘 다 맞아야 실행
+or 하나만 참이면 True 온도> 35 or 습도> 80 하나만 맞아도 실행
+not 반대로 뒤집기 not b utton.clicked True→False 변환
+복합 조건 코드 예시
+# 어둡고 시끄러우면 = 긴급!
+if env.illuminance < 30 and env.volume > 50:
+led.rgb = (255, 0, 0)
+display.text = "ALERT!"
+elif env.illuminance < 30: # 어둡기만 하면
+led.rgb = (255, 255, 0)
+display.text = "DARK"
+else: # 그 외
+led.turn_off()
+display.text = "OK"
+핵심 원칙: 우선순위 순서
+조건 순서가 중요합니다!
+가장 긴급한 조건(and)을 먼저 검사하고, 덜 긴급한 조건(elif)을 나중
+에 검사합니다.
+만약 elif를 if 앞으로 옮기면?
+→ "어두움"만 체크되고
+→ "어둡고 시끄러운" 긴급 상황을 놓칩니다!
+
+--- PDF 3 ---
+10 차시 · 다중 센서 조합
+실습 — 복합 조건 코드 만들기
+and/or를 사용한 복합 조건 프로그램을 직접 만들어봅시다
+C odeW ithCathy AI 바이브코딩 × 파이모디 플러스 02
+실습 A: 불쾌지수 알림
+import modi_plus, time
+bundle = modi_plus.MODIPlus()
+env = bundle.envs[0]
+led = bundle.leds[0]
+display = bundle.displays[0]
+while True:
+t = env.temperature
+h = env.humidity
+# 불쾌: 고온 AND 고습
+if t > 28 and h > 70:
+led.rgb = (255, 0, 0)
+display.text = "UNCOMFORT!"
+elif t > 28 or h > 70:
+led.rgb = (255, 255, 0)
+display.text = f"T:{t:.0f} H:{h:.0f}"
+else:
+led.rgb = (0, 255, 0)
+display.text = "COMFORT"
+time.sleep(1)
+실습 B: 스마트 야간 모드
+import modi_plus, time
+bundle = modi_plus.MODIPlus()
+env = bundle.envs[0]
+button = bundle.buttons[0]
+led = bundle.leds[0]
+display = bundle.displays[0]
+night_mode = False
+while True:
+if button.clicked:
+night_mode = not night_mode
+light = env.illuminance
+if night_mode and light < 30:
+led.rgb = (50, 50, 20)
+display.text = "NIGHT ON"
+elif not night_mode:
+led.turn_off()
+display.text = "DAY MODE"
+else:
+led.turn_off()
+display.text = "BRIGHT"
+time.sleep(0.2)
+
+--- PDF 4 ---
+10 차시 · 다중 센서 조합
+우선순위 로직 설계 — AI에게 설계 요청하기
+매핑표를 먼저 설계하고, 표 내용을 AI에게 전달하는 방법
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 03
+5단계 우선순위 매핑표
+순위 조건 LED D isplay 의미
+1 ( 최고) 빛< 30 A N D 소리> 50 빨강 깜빡 EM ERG EN C Y! 어둡고 시끄러운 긴급
+2 온도> 35 빨강 H O T! 고온 경고
+3 빛< 30 노랑 D A RK 어두움 알림
+4 소리> 50 파랑 깜빡 LO UD 소음 알림
+기본 그 외 초록 A LL O K 정상 상태
+바이브코딩 프롬프트 (매핑표 → 코드)
+바이브코딩 프롬프트
+"파이모디 환경 센서로 다음 5단계 우선순위 경보 시스템을 만들어줘:
+1순위: 빛<30 AND 소리>50 → LED 빨강 깜빡 + 'EMERGENCY!'
+2순위: 온도>35 → LED 빨강 + 'HOT!'
+3순위: 빛<30 → LED 노랑 + 'DARK'
+4순위: 소리>50 → LED 파랑 깜빡 + 'LOUD'
+기본: LED 초록 + 'ALL OK'. LED 깜빡임은 blink 함수로 분리해줘."
+핵심: 매핑표를 먼저 설계하고, 표 내용을 그대로 프롬프트에 넣어주면 AI가 정확한 코드를 생성합니다!
+
+--- PDF 5 ---
+10 차시 · 다중 센서 조합
+실습 — 5단계 스마트 경보 시스템 전체 코드
+바이브코딩으로 생성된 경보 시스템 코드를 읽고 이해합니다
+C odeW ithCathy AI 바이브코딩 × 파이모디 플러스 04
+전체 코드 (왼쪽: 설정 + 함수, 오른쪽: 메인 루프)
+import modi_plus, time
+bundle = modi_plus.MODIPlus()
+env = bundle.envs[0]
+led = bundle.leds[0]
+display = bundle.displays[0]
+def blink(color, n=3):
+for _ in range(n):
+led.rgb = color
+time.sleep(0.2)
+led.turn_off()
+time.sleep(0.2)
+while True:
+li = env.illuminance
+so = env.volume
+te = env.temperature
+if li < 30 and so > 50:
+blink((255,0,0))
+display.text = "EMERGENCY!"
+elif te > 35:
+led.rgb = (255,0,0)
+display.text = f"HOT!{te:.0f}C"
+elif li < 30:
+led.rgb = (255,255,0)
+display.text = "DARK"
+elif so > 50:
+blink((0,0,255))
+display.text = "LOUD"
+else:
+led.rgb = (0,255,0)
+display.text = "ALL OK"
+time.sleep(0.5)
+• blink() 함수: LED 깜빡임을 재사용 가능하게 분리
+• if→elif→else: 우선순위 순서로 체크 (긴급한 것 먼저!)
+• f-string으로 온도값 동적 표시
+
+--- PDF 6 ---
+10 차시 · 다중 센서 조합
+바이브코딩도전 — AI에게 이렇게 요청하세요!
+매핑표를 설계한 뒤 AI에게 코드를 요청하는 도전 과제 3가지
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 06
+도전 과제 1: 스마트 교실
+바이브코딩 프롬프트
+"파이모디 환경 센서로 스마트 교실 시스템을 만들어줘.
+• 온도 28도 초과 AND 습도 70% 초과 → LED 빨강 + Display 'VENTILATE!' (환기 필요)
+• 소리 60% 초과 → LED 파랑 깜빡 + Display 'QUIET!'
+• 빛 20% 이하 → LED 노랑 + Display 'LIGHTS ON'
+• 기본 → LED 초록 + Display 'CLASS OK'. blink 함수 사용해줘"
+도전 과제 2: 주차 보조 시스템
+바이브코딩 프롬프트
+"파이모디 ToF 센서와 환경 센서를 조합한 주차 보조 시스템을 만들어줘.
+• 거리 5cm 미만 → LED 빨강 깜빡 + Display 'STOP!' + 스피커 경고음
+• 거리 15cm 미만 → LED 노랑 + Display에 거리 표시
+• 거리 30cm 미만 → LED 초록 + Display에 거리 표시
+• 기본 → LED 끄기 + Display RESET'. 0.2초마다 체크해줘"
+※ 매핑표를 먼저 설계 → 표 내용을 그대로 프롬프트에 → AI가 정확한 코드 생성! 한 기능씩 테스트하세요!
+
+--- PDF 7 ---
+10 차시 · 다중 센서 조합
+나만의 스마트홈 시나리오 설계
+직접 센서 조합 시나리오를 설계하고 바이브코딩으로 구현합니다
+C odeW ithCathy AI 바이브코딩 × 파이모디 플러스 05
+시나리오 설계표 (직접 작성!)
+순위 조건 (센서 조합) LED D isplay 설명
+1 (직접 설계)
+2
+3
+4
+기본 그 외
+아이디어 예시
+• 스마트 교실: 온도 높으면 환기 알림, 소리 크면 조용 경고, 어두우면 조명 켜기
+• 식물 관리: 습도 낮으면 물주기 알림, 온도 높으면 그늘 이동 경고
+• 보안 시스템: ToF 가까우면 침입 경고, 소리 크면 경보
+• 운동 코치: 다이얼로 목표 설정, IMU 기울기로 자세 감지
+
+--- PDF 8 ---
+감사합니다
+Thank Y ou!
+AI 바이브코딩으로 배우는 파이모디 플러스 · 10차시
+C odeWithCathy

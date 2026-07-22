@@ -1,0 +1,239 @@
+--- PDF 1 ---
+C O D E W I T H C A T H Y · A I V I B E C O D I N G
+A I 바이브코딩으로배우는
+파이모디플러스
+16차시 | 음성으로 파이모디 제어
+음성 인식→파이모디 연동 | 명령어 직접 설계 | '켜줘' → LED ON
+C odeW ithCathy
+
+--- PDF 2 ---
+16 차시 · 음성 파이모디
+음성→파이모디 제어, 어떻게 연결할까?
+15차시 음성→텍스트 변환을 파이모디 하드웨어 제어까지 확장합니다
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 01
+전체 흐름
+필요한 라이브러리
+라이브러리 역할 설치
+sp eech_recog nition 음성→텍스트 변환 p ip install S p eechRecog nition
+p yaud io 마이크 입력 처리 p ip install p yaud io
+p ym od i- p lus 파이모디 제어 p ip install p ym od i- p lus
+바이브코딩 프롬프트
+"파이썬에서 마이크로 음성을 인식해서 텍스트로 바꾸고, 그 텍스트에 따라 파이모디 LED를 제어하는 프로그램을 만들어줘. speech_recognition과 pymodi-plus 사용해줘
+해줘"
+"
+
+--- PDF 3 ---
+16 차시 · 음성 파이모디
+명령어 매핑표 설계 — 어떤 말을 하면 어떤 동작을?
+음성 명령과 파이모디 동작을 매핑표로 설계합니다
+C odeW ithCathy AI 바이브코딩 × 파이모디 플러스 02
+명령어 매핑표
+음성 명령 키워드 LED D isplay 코드
+"켜줘" 켜 흰색 ON "LED O N " led .rg b = (255,255,255)
+"꺼줘" 꺼 O FF "LED O FF" led .turn_off()
+"빨간색" 빨간 빨강 "RED " led .rg b = (255,0,0)
+"파란색" 파란 파랑 "BLUE" led .rg b = (0,0,255)
+"초록색" 초록 초록 "G REEN " led .rg b = (0,255,0)
+"종료" 종료 끄기 "BYE" b reak
+"in" 키워드로 유연한 매칭
+# "켜줘", "불 켜", "LED 켜" 모두 인식!
+if "켜" in text:
+led.rgb = (255, 255, 255)
+elif "빨간" in text:
+led.rgb = (255, 0, 0)
+핵심: ==가 아닌 in을 쓰면 다양한 말투를 모두 인식합니다!
+
+--- PDF 4 ---
+16 차시 · 음성 파이모디
+전체 코드 — 음성→파이모디 통합
+음성 인식 + 명령어 판별 + 파이모디 제어 전체 코드입니다
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 03
+import speech_recognition as sr
+import modi_plus, time
+# 파이모디 연결
+bundle = modi_plus.MODIPlus()
+led = bundle.leds[0]
+display = bundle.displays[0]
+# 음성 인식기
+recognizer = sr.Recognizer()
+print("
+ 음성 파이모디 시작!")
+while True:
+with sr.Microphone() as source:
+print("\n말해보세요...")
+recognizer.adjust_for_ambient_noise(
+source)
+audio = recognizer.listen(source)
+try:
+text = recognizer.recognize_google(
+audio, language="ko-KR")
+print(f"인식: {text}")
+if "켜" in text:
+led.rgb = (255,255,255)
+display.text = "LED ON"
+elif "꺼" in text:
+led.turn_off()
+display.text = "LED OFF"
+elif "빨간" in text:
+led.rgb = (255,0,0)
+display.text = "RED"
+elif "파란" in text:
+led.rgb = (0,0,255)
+display.text = "BLUE"
+elif "종료" in text:
+led.turn_off()
+display.text = "BYE"
+break
+except:
+print("다시 말해주세요")
+
+--- PDF 5 ---
+16 차시 · 음성 파이모디
+실습 — 나만의 음성 명령어 추가 + 바이브코딩 도전
+기본 명령어 외에 나만의 창의적 명령어를 추가합니다
+C odeW ithCathy AI 바이브코딩 × 파이모디 플러스 04
+실습: 나만의 명령어 설계표
+내 명령어 키워드 파이모디 동작 아이디어
+"무지개" 무지개 LED 빨→주→노→초→파→보 0.5 초 간격 색 순환
+"S O S " 도움 빨간 LED 5 회 깜빡 긴급 신호 표시
+(직접 설계 1)
+(직접 설계 2)
+바이브코딩 도전 과제 3가지
+바이브코딩 프롬프트
+도전 1: "위 음성 파이모디 코드에 '무지개' 명령을 추가해줘. LED가 빨→주→노→초→파→보 순서로 0.5초 간격으로 바뀌게 해줘. time.sleep과 for문 사용해줘"
+바이브코딩 프롬프트
+도전 2: "위 코드에 '온도 알려줘' 명령을 추가해줘. 환경 센서의 온도값을 Display에 표시하고, 30도 넘으면 LED 빨간색으로 경고해줘"
+바이브코딩 프롬프트
+도전 3: "'밝기 올려' '밝기 내려' 명령 추가" → LED 밝기를 25씩 증가/감소하는 음성 리모컨!
+
+--- PDF 6 ---
+16 차시 · 음성 파이모디
+바이브코딩프롬프트 가이드 + 활동 정리
+좋은 프롬프트 vs 나쁜 프롬프트 비교와 오늘 내용을 정리합니다
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 05
+프롬프트 비교
+상황
+ 나쁜 프롬프트
+ 좋은 프롬프트
+기본 구현 "음성인식 코드 만들어" "sp eech_recog nition 으로 마이크 음성을 한국어로 인식하고 에러 처리도 포함해줘"
+파이모디 연동 "파이모디 제어해줘" "위 코드에 p ym od i- p lus 추가해서 '켜줘'→LED O N , '꺼줘'→O FF 해줘"
+오류 수정 "안 돼 고쳐" "이 코드에서 'O S Erro r - 9999' 오류 발생. 마이크 연결 상태. 해결법 알려줘"
+기능 추가 "기능 더 넣어" "위 코드에 '무지개' 명령 추가해서 LED 색 6가지를 0.5 초 간격으로 순환해줘"
+활동 정리 Q&A
+Q 질문 답
+Q1 음성→파이모디 전체 흐름은? 음성 입력 → S TT 변환 → 명령어 판별(if) → 파이모디 제어
+Q2 "in" 연산자를 쓰는 이유? "불 켜줘", "LED 켜" 등 다양한 표현을 유연하게 매칭
+Q3 try - excep t 를 쓰는 이유? 인식 실패 시 프로그램이 죽지 않고 계속 동작
+
+--- PDF 7 ---
+16 차시 · 음성 파이모디
+실습 — 무지개 명령어 코드 읽기
+바이브코딩으로 생성된 무지개 명령어 코드를 읽고 이해해봅시다
+C odeW ithCathy AI 바이브코딩 × 파이모디 플러스 06
+무지개 명령어 함수
+import time
+rainbow = [
+(255,0,0), # 빨강
+(255,165,0), # 주황
+(255,255,0), # 노랑
+(0,255,0), # 초록
+(0,0,255), # 파랑
+(128,0,128), # 보라
+]
+def rainbow_led(led, display):
+display.text = "Rainbow!"
+for color in rainbow:
+led.rgb = color
+time.sleep(0.5)
+led.turn_off()
+기존 코드에 추가하는 방법
+# 기존 if-elif 체인에 추가
+...
+elif "무지개" in text:
+rainbow_led(led, display)
+elif "에스오에스" in text:
+for _ in range(5):
+led.rgb = (255,0,0)
+time.sleep(0.3)
+led.turn_off()
+time.sleep(0.3)
+display.text = "SOS!"
+...
+코드 읽기 포인트
+① 색상을 리스트에 RGB 튜플로 저장 → ② for문으로 순회 → ③
+time.sleep(0.5)로 대기 → ④ 함수로 분리하면 elif 한 줄만 추가하면 됨
+
+--- PDF 8 ---
+16 차시 · 음성 파이모디
+센서 연동 확장 — 음성 + 환경 센서 조합
+음성 명령으로 센서값을 읽어 파이모디에 표시하는 확장 기능을 배웁니다
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 07
+음성 + 센서 연동 매핑표
+음성 명령 키워드 센서 파이모디 동작
+"온도 알려줘" 온도 env.tem p erature D isp lay와 터미널창에 온도 표시 + 30 도 초과시 LED 빨강
+"습도 알려줘" 습도 env.hum id ity D isp lay와 터미널창에 습도 표시 + 70% 초과시 LED 파랑
+"밝기 알려줘" 밝기 env.intensity D isp lay와 터미널창에 밝기 % 표시 + 30% 이하면 LED 노랑
+"전체 상태" 상태 모든 센서 온도·습도·밝기를 2초 간격으로 순서대로 D isp lay와 터미널창에 표시
+센서 연동 코드 예시
+elif "온도" in text:
+t = env.temperature
+display.text = f"T:{t:.1f}C"
+if t > 30:
+led.rgb = (255,0,0)
+else:
+led.rgb = (0,255,0)
+print(f"온도: {t:.1f}C")
+elif "상태" in text:
+for label, val in [
+("T", env.temperature),
+("H", env.humidity),
+("L", env.illuminance)]:
+display.text = f"{label}:{val:.0f}"
+time.sleep(2)
+핵심: 센서 읽기 코드를 elif 블록 안에 넣으면 됩니다!
+음성 명령이 없을 때는 센서를 읽지 않으므로 배터리도 절약
+됩니다.
+
+--- PDF 9 ---
+16 차시 · 음성 파이모디
+트러블슈팅— 음성+파이모디 오류 해결
+음성 인식 + 파이모디 프로젝트에서 자주 만나는 오류를 정리합니다
+C odeW ithCathy AI 바이브코딩 × 파이모디 플러스 08
+자주 만나는 오류 TOP 5
+증상 원인 해결법 바이브코딩 질문
+O S Error - 9999 마이크 권한 없음 시스템 설정에서 마이크 허용 "p yaud io O S Error - 9999 해결"
+인식은 되는데
+명령 안 됨 키워드 불일치 p rint(text) 로 실제 인식 결과 확인 "인식된 텍스트 디버깅"
+파이모디 연결 안 됨 US B/BT 연결 문제 케이블 재연결, 포트 확인 "p ym od i 연결 안 될 때"
+LED 가 안 바뀜 elif 순서 오류 조건 순서 확인 (겹치는 키워드) "if- elif 순서 디버깅"
+소리 인식이 느림 네트워크 지연 Wi - Fi 확인, 짧게 말하기 "S TT 응답 속도 개선"
+핵심 디버깅 팁
+① 항상 print(text) 추가! — 인식 결과를 눈으로 확인해야 키워드 매칭 문제를 찾을 수 있습니다
+② 오류 메시지 전체를 AI에게 복붙 — "이 코드에서 [오류 메시지]가 나요. 파이모디 USB 연결 중" 으로 상황 설명
+③ 한 기능씩 테스트 — 먼저 음성만 테스트 → 파이모디만 테스트 → 합치기
+
+--- PDF 10 ---
+16 차시 · 음성 파이모디
+나만의 음성 시나리오 설계 — 직접 명령어 설계하기
+나만의 음성 명령어 5가지를 설계하고 매핑표를 완성합니다
+C odeWithCathy AI 바이브코딩 × 파이모디 플러스 09
+나만의 음성 시나리오 설계표 (직접 작성!)
+내 명령어 키워드 LED D isplay 기타 출력
+"켜줘" 켜 흰색 LED O N (기본)
+"꺼줘" 꺼 끄기 LED O FF
+(직접 설계 1)
+(직접 설계 2)
+(직접 설계 3)
+(직접 설계 4)
+(직접 설계 5)
+아이디어 힌트
+• "타이머 [숫자]초" → 카운트다운 + Display 표시 + 끝나면 LED 깜빡
+• "기분 좋아" → Display에 이모지(^_^) + LED 무지개
+• "보안 모드" → ToF 센서 + 소리 센서 모니터링 시작, 침입 감지 시 경보
+• "음악 재생" → Speaker로 간단한 멜로디 출력
+
+--- PDF 11 ---
+감사합니다
+Thank Y ou!
+AI 바이브코딩으로 배우는 파이모디 플러스 · 16차시
+C odeWithCathy
