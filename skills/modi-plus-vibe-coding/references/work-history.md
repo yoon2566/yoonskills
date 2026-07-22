@@ -20,7 +20,7 @@
 | `12_modi_plus_joystick_car` | 조이스틱 차동 자동차 코드 설계 | `joystick.x/y`, 버튼 정지, 모터 `set_speed/stop`, deadzone·속도 상한·예외 정리와 self-test를 넣었다. | 실제 모터 방향과 바닥 주행은 물리적으로 검증되지 않았다. |
 | `13_modi_plus_button_rgb_cycle` | 버튼 RGB 순환 | Python 3.8.10 64비트, `pymodi-plus 0.4.2`, Network `0xB22`, Button `0x768`, LED `0xB9` 연결과 30초 정상 종료·LED off를 확인했다. | 해당 실행 동안 눌림 로그가 없어 색상 전환 자체의 물리적 관찰은 아직 미확정이다. |
 | `14_modi_vibe_practice` | 교안 초반 Python 연습 | `01_hello_world.py`를 프로젝트 `.venv`에서 compile/run하고 Python 3.8.10 실행을 확인했다. | 4~6차시 문법 실습을 이어서 하드웨어 작업과 분리한다. |
-| `15_modi_plus_skill_upgrade` | 학생용 스킬 업그레이드 | 공식 저장소 clone, 21개 PDF·207페이지 분석, 재사용 스캔·버튼 RGB 예제, 교안/API/이력 참고문서를 만들고 공개 skill 저장소 배포를 준비 중이다. | 최종 push 후 clone·self-test·스킬 validator를 다시 확인한다. |
+| `15_modi_plus_skill_upgrade` | 학생용 스킬 업그레이드 | 공식 저장소 clone, 21개 PDF·207페이지 분석, 재사용 스캔·버튼 RGB 예제, 교안/API/이력 참고문서를 만들고 공개 skill 저장소 `yoon2566/yoonskills`의 `main`에 배포했다. 새 `main` clone에서 self-test·실제 10모듈 스캔·스킬 validator까지 확인했다. | 공개 저장소의 예제는 모터가 없는 현재 구성에서 Button·LED처럼 연결이 확인된 모듈부터 실행한다. |
 
 ## 시점별 하드웨어 snapshot
 
